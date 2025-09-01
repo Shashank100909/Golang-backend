@@ -153,6 +153,11 @@ func (h *productHandler) GetCartItems(c *gin.Context) {
 
 	cartProducts, err := h.productService.GetCartItems(UserID.(int))
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusOK, gin.H{
+				"Success" :"Cart is empty",
+			})
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"Error": "Internal server Error",
 		})

@@ -122,23 +122,18 @@ func (h *productDao) GetCartItems(UserID int) ([]dtos.CartResp, error) {
 		return nil, err
 	}
 
-	if len(CartItems) == 0 {
-		return nil, gorm.ErrRecordNotFound
-	}
 	return CartItems, nil
 }
 
-
 func (h *productDao) DeleteProductFromCart(ProductID int, UserID int) error {
-    result := h.db.Where("product_id = ? AND user_id = ?", ProductID, UserID).
-        Delete(&models.Cart{})
+	result := h.db.Where("product_id = ? AND user_id = ?", ProductID, UserID).
+		Delete(&models.Cart{})
 
-    if result.Error != nil {
-        return result.Error
-    }
-    if result.RowsAffected == 0 {
-        return gorm.ErrRecordNotFound
-    }
-    return nil
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
-
