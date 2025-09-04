@@ -4,13 +4,12 @@ import (
 	"errors"
 
 	dao "github.com/Shashank100909/STUDENTS-API/daos"
-	"github.com/Shashank100909/STUDENTS-API/dtos"
 	"github.com/Shashank100909/STUDENTS-API/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
-	Register(input dtos.RegisterUserInput) error
+	Register(input models.User) error
 	CreateStudent(req models.Student) error
 	GetStudent(StudentID int) ([]models.Student, error)
 	FindUserByUsername(username string) (*models.User, error)
@@ -25,7 +24,7 @@ func NewUserService(userDAO dao.UserDAO) UserService {
 	return &userService{userDAO}
 }
 
-func (s *userService) Register(input dtos.RegisterUserInput) error {
+func (s *userService) Register(input models.User) error {
 	_, err := s.userDAO.GetUserByUsername(input.Username)
 	if err == nil {
 		return errors.New("user already exists")
@@ -37,6 +36,12 @@ func (s *userService) Register(input dtos.RegisterUserInput) error {
 	}
 
 	user := models.User{
+		FirstName: input.FirstName,
+		LastName: input.LastName,
+		Age: input.Age,
+		Gender: input.Gender,
+		Email: input.Email,
+		MobileNumber: input.MobileNumber,
 		Username: input.Username,
 		Password: string(hashedPassword),
 	}

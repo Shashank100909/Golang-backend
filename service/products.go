@@ -13,6 +13,7 @@ type ProductService interface {
 
 	AddProductToCart(UserID int, req dtos.AddToCartReq, ProductID int) (int, error)
 	GetCartItems(UserID int) ([]dtos.CartResp, error)
+	AddAddress(Input models.Address, UserID int) (int, error)
 	// UpdateCartItems(UserID int, ProductID int, req dtos.AddToCartReq) error
 }
 
@@ -70,3 +71,19 @@ func (h *productService) GetCartItems(UserID int) ([]dtos.CartResp, error) {
 // 		Quantity: req.
 // 	}
 // }
+
+func (h *productService) AddAddress(Input models.Address, UserID int) (int, error) {
+	Address := models.Address{
+		UserID: UserID ,
+		Name: Input.Name,
+		MobileNumber: Input.MobileNumber,
+		Street: Input.Street,
+		Landmark: Input.Landmark,
+		City: Input.City,
+		Pincode: Input.Pincode,
+		State: Input.State,
+		Country: Input.Country,
+	}
+
+	return h.productDAO.AddAddress(Address)
+}

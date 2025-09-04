@@ -15,6 +15,8 @@ type ProductDAO interface {
 	AddProductToCart(cartItem models.Cart, ProductID int) (int, error)
 	GetCartItems(UserID int) ([]dtos.CartResp, error)
 	DeleteProductFromCart(ProductID int, UserID int) error
+
+	AddAddress(Address models.Address) (int, error)
 }
 
 type productDao struct {
@@ -136,4 +138,12 @@ func (h *productDao) DeleteProductFromCart(ProductID int, UserID int) error {
 		return gorm.ErrRecordNotFound
 	}
 	return nil
+}
+
+func (h *productDao) AddAddress(Address models.Address) (int, error) {
+	err := h.db.Create(&Address).Error
+	if err != nil {
+		return 0, err
+	}
+	return Address.AddressID, nil
 }

@@ -22,7 +22,7 @@ func NewUserHandler(userService services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) Register(c *gin.Context) {
-	var input dtos.RegisterUserInput
+	var input models.User
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -100,7 +100,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID)
+	token, err := utils.GenerateJWT(uint(user.UserID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -134,3 +134,4 @@ func (h *UserHandler) DeleteStudent(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		gin.H{"Success": "Student Deleted successfully"})
 }
+

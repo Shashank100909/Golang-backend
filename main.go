@@ -20,6 +20,10 @@ func main() {
 		&models.User{},
 		&models.Student{},
 		&models.Products{},
+		&models.Address{},
+	)
+
+	configs.DB.AutoMigrate(
 		&models.Cart{},
 	)
 
@@ -27,9 +31,9 @@ func main() {
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-    "http://localhost:5173",
-    "https://react-projects-beta-hazel.vercel.app",
-},
+			"http://localhost:5173",
+			"https://react-projects-beta-hazel.vercel.app",
+		},
 		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -60,6 +64,8 @@ func main() {
 	auth.POST("/cart", productHandler.AddProductToCart)
 	auth.GET("/cart/:user_id", productHandler.GetCartItems)
 	auth.DELETE("cart/:product_id", productHandler.DeleteProductFromCart)
+
+	auth.POST("address", productHandler.AddAddress)
 
 	// auth.PUT("/cart/:user_id", productHandler.UpdateCartItems)
 

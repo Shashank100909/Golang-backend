@@ -232,3 +232,34 @@ func (h *productHandler) DeleteProductFromCart(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"Success": "Product Deleted Successfully"})
 }
+
+func (h *productHandler) AddAddress(c *gin.Context){
+	 var Input models.Address
+
+if	err := c.ShouldBindJSON(&Input); err != nil {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"Error" : "Invalid request payload",
+	})
+	return
+}
+
+UserID, exists := c.Get("user_id")
+if !exists{
+	c.JSON(http.StatusUnauthorized, gin.H{
+		"Error":"User does not exist",
+	})
+	return
+}
+
+AddressID,err := h.productService.AddAddress(Input,UserID.(int))
+if err != nil {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"Error":"Unable to add address",
+	})
+	return
+}
+c.JSON(http.StatusCreated, gin.H{
+	"Succsess": "Addrress added successfully",
+	"AddressID": AddressID,
+})
+}
